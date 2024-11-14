@@ -1,0 +1,74 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Jupyter Notebook specific file types
+
+# Visual Studio Code files
+.vscode/
+*.code-workspace
+
+# Environment variables and settings
+.env
+*.env
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+venv.bak/
+env.bak/
+
+# macOS files
+.DS_Store
+
+# Logs
+*.log
+
+# Cache files
+*.cache
+*.mypy_cache
+*.pytest_cache
+*.ipynb_cache
+
+# Python egg files
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg-info
+.installed.cfg
+*.egg-info/
+.eggs/
+
+# Distribution / packaging
+*.wheel
+*.egg-info/
+pip-wheel-metadata/
+share/python-wheels/
+*.whl
+
+# IDEs and editors
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Test output
+coverage/
+.tox/
+.cache/
+pytest_cache/
+coverage.xml
+
+# MyPy and Pyright cache
+.mypy_cache/
+.typing
