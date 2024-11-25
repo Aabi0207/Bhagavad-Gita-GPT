@@ -7,33 +7,23 @@ import numpy as np
 import os
 import tqdm
 
-# Constants
-# batch_size = 64
-# n_embd = 384
-# n_head = 6
-# eval_iters = 100
-# block_size = 256
-# n_layer = 6
-# device = "cuda" if torch.cuda.is_available() else "cpu"
-# eval_interval = 500
-# max_iter = 5000
-# dropout = 0.2
-# lr = 3e-4
+# Use below setting only on gpu
 
-batch_size = 32
-n_embd = 124
-n_head = 4
-eval_iters = 50
-block_size = 124
+# Constants
+batch_size = 64
+n_embd = 384
+n_head = 6
+eval_iters = 100
+block_size = 128
 n_layer = 4
 device = "cuda" if torch.cuda.is_available() else "cpu"
 eval_interval = 500
-max_iter = 2
-dropout = 0.2
+max_iter = 5000
+dropout = 0.3
 lr = 3e-4
 
 # Load the data
-data_dir = "Data/CharLevelEncoded/"
+data_dir = "/kaggle/input/bhagavad-gita-encoded"
 def get_batch(split):
     if split == "train":
         data = np.memmap(os.path.join(data_dir, 'train.bin'), dtype=np.uint16, mode='r')
@@ -187,6 +177,8 @@ print(sum(p.numel() for p in model.parameters()))
 
 opt = torch.optim.AdamW(model.parameters(), lr=lr)
 
+best_val_loss = float('inf')
+
 for i in tqdm.tqdm(range(max_iter)):
     # forward pass
     xb, yb = get_batch('train')
@@ -200,9 +192,17 @@ for i in tqdm.tqdm(range(max_iter)):
     # every once in a while evaluate the loss on train and val sets
     if i % eval_interval == 0 or i == max_iter - 1:
         losses = estimate_loss()
+
+        # Save the model with the best validation loss
+        if losses['val'] < best_val_loss:
+            torch.save(model.state_dict, 'model.pth')
         print(f"step {i}: train loss: {losses['train']:.4f}, val loss: {losses['val']:.4f}")
 
-    
+
+# load the saved model
+model = GPTLanguageModel().to(device)
+model.load_state_dict(torch.load("model.pth"))
+
 # generate from the model
 context = torch.zeros((1, 1), dtype=torch.long, device=device)
 print(decode(model.generate(context, 500)[0].tolist()))
